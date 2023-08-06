@@ -106,12 +106,10 @@ windowResize();
 
 $(".no-propagate").on("click", function (el) { el.stopPropagation(); });
 
-//Check url to load remote DB
-const loadUrlDB = $.urlParam('url');
-if (loadUrlDB != null) {
+const searchParams = new URLSearchParams(window.location.search)
+if (searchParams.has('Uuid') && searchParams.has('AuthToken')){
     setIsLoading(true);
-    console.log(`fetching url ${loadUrlDB}`)
-    const response = await fetch(loadUrlDB)
+    const response = await fetch(`http://127.0.0.1:9906/v1/content/raw?Uuid=${searchParams.get('Uuid')}`)
     const blob = await response.blob()
     loadDB(blob.arrayBuffer())
 }
