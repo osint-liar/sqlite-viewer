@@ -107,20 +107,13 @@ windowResize();
 $(".no-propagate").on("click", function (el) { el.stopPropagation(); });
 
 //Check url to load remote DB
-var loadUrlDB = $.urlParam('url');
+const loadUrlDB = $.urlParam('url');
 if (loadUrlDB != null) {
     setIsLoading(true);
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', decodeURIComponent(loadUrlDB), true);
-    xhr.responseType = 'arraybuffer';
-
-    xhr.onload = function(e) {
-        loadDB(this.response);
-    };
-    xhr.onerror = function (e) {
-        setIsLoading(false);
-    };
-    xhr.send();
+    console.log(`fetching url ${loadUrlDB}`)
+    const response = await fetch(loadUrlDB)
+    const blob = await response.blob()
+    loadDB(blob.arrayBuffer())
 }
 
 function loadDB(arrayBuffer) {
@@ -129,7 +122,7 @@ function loadDB(arrayBuffer) {
     resetTableList();
 
     initSqlJs().then(function(SQL){
-        var tables;
+        let tables;
         try {
             db = new SQL.Database(new Uint8Array(arrayBuffer));
 
