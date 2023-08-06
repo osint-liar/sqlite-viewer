@@ -9,16 +9,6 @@ var bottomBarDefaultPos = null, bottomBarDisplayStyle = null;
 var errorBox = $("#error");
 var lastCachedQueryCount = {};
 
-$.urlParam = function(name){
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results==null){
-        return null;
-    }
-    else{
-        return results[1] || 0;
-    }
-};
-
 var fileReaderOpts = {
     readAsDefault: "ArrayBuffer", on: {
         load: function (e, file) {
@@ -109,9 +99,11 @@ $(".no-propagate").on("click", function (el) { el.stopPropagation(); });
 const searchParams = new URLSearchParams(window.location.search)
 if (searchParams.has('Uuid') && searchParams.has('AuthToken')){
     setIsLoading(true);
-    const response = await fetch(`http://127.0.0.1:9906/v1/content/raw?Uuid=${searchParams.get('Uuid')}`)
-    const blob = await response.blob()
-    loadDB(blob.arrayBuffer())
+    const response = await fetch(`http://127.0.0.1:9906/v1/content/raw?Uuid=${searchParams.get('Uuid')}`).
+          .then((response) => response.blob())
+          .then((blob) => {
+              loadDB(blob.arrayBuffer())
+          });
 }
 
 function loadDB(arrayBuffer) {
