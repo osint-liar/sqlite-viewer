@@ -96,19 +96,23 @@ windowResize();
 
 $(".no-propagate").on("click", function (el) { el.stopPropagation(); });
 
-const searchParams = new URLSearchParams(window.location.search)
-if (searchParams.has('Uuid') && searchParams.has('AuthToken')){
-    setIsLoading(true);
-    const authToken = searchParams.get('AuthToken').replace(' ', '+')
-    const uuid = searchParams.get('Uuid')
-    fetch(`http://127.0.0.1:9906/v1/content/raw?Uuid=${uuid}`, {
-        headers: {Authorization: `Bearer ${authToken}`}
-    })
-          .then((response) => response.blob())
-          .then((blob) => {
-              loadDB(blob.arrayBuffer())
-          });
-}
+onload = (event) => {
+    const searchParams = new URLSearchParams(window.location.search)
+    if (searchParams.has('Uuid') && searchParams.has('AuthToken')){
+        setIsLoading(true);
+        const authToken = searchParams.get('AuthToken').replace(' ', '+')
+        const uuid = searchParams.get('Uuid')
+        fetch(`http://127.0.0.1:9906/v1/content/raw?Uuid=${uuid}`, {
+            headers: {Authorization: `Bearer ${authToken}`}
+        })
+              .then((response) => response.blob())
+              .then((blob) => {
+                  loadDB(blob.arrayBuffer())
+              });
+    }
+
+};
+
 
 function loadDB(arrayBuffer) {
     setIsLoading(true);
