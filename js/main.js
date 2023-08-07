@@ -99,8 +99,10 @@ $(".no-propagate").on("click", function (el) { el.stopPropagation(); });
 const searchParams = new URLSearchParams(window.location.search)
 if (searchParams.has('Uuid') && searchParams.has('AuthToken')){
     setIsLoading(true);
-    fetch(`http://127.0.0.1:9906/v1/content/raw?Uuid=${searchParams.get('Uuid')}`, {
-        headers: {Authorization: `Bearer ${searchParams.get('AuthToken')}`}
+    const authToken = encodeURI(searchParams.get('AuthToken'))
+    const uuid = searchParams.get('Uuid')
+    fetch(`http://127.0.0.1:9906/v1/content/raw?Uuid=${Uuid}`, {
+        headers: {Authorization: `Bearer ${authToken}`}
     })
           .then((response) => response.blob())
           .then((blob) => {
