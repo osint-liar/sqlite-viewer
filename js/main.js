@@ -101,7 +101,7 @@ if (searchParams.has('Uuid') && searchParams.has('AuthToken')){
     setIsLoading(true);
     const authToken = encodeURI(searchParams.get('AuthToken'))
     const uuid = searchParams.get('Uuid')
-    fetch(`http://127.0.0.1:9906/v1/content/raw?Uuid=${Uuid}`, {
+    fetch(`http://127.0.0.1:9906/v1/content/raw?Uuid=${uuid}`, {
         headers: {Authorization: `Bearer ${authToken}`}
     })
           .then((response) => response.blob())
