@@ -106,8 +106,8 @@ onload = (event) => {
             headers: {Authorization: `Bearer ${authToken}`}
         })
               .then((response) => response.blob())
-              .then((blob) => {
-                  loadDB(blob.arrayBuffer())
+              .then(async(blob) => {
+                  loadDB(await blob.arrayBuffer())
               });
     }
 
